@@ -2,15 +2,16 @@
 // Author: NotAlexNoyle.
 package plugin;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import net.trueog.diamondbankog.DiamondBankAPIJava;
+import me.catcoder.sidebar.ProtocolSidebar;
+import me.catcoder.sidebar.Sidebar;
 
 public class ScoreboardOG extends JavaPlugin {
 
     private static ScoreboardOG plugin;
-    private static DiamondBankAPIJava diamondBankAPI;
     private static FileConfiguration config;
 
     @Override
@@ -21,21 +22,7 @@ public class ScoreboardOG extends JavaPlugin {
         saveDefaultConfig();
         config = getConfig();
 
-        getServer().getPluginManager().registerEvents(new Listeners(), this);
-
-        /*
-         * final RegisteredServiceProvider<DiamondBankAPIJava> provider =
-         * getServer().getServicesManager() .getRegistration(DiamondBankAPIJava.class);
-         * 
-         * if (provider == null) {
-         * 
-         * getLogger().severe("DiamondBank-OG API is null – disabling plugin.");
-         * Bukkit.getPluginManager().disablePlugin(this); return;
-         * 
-         * }
-         * 
-         * diamondBankAPI = provider.getProvider();
-         */
+        initializeScoreboards();
 
     }
 
@@ -45,15 +32,44 @@ public class ScoreboardOG extends JavaPlugin {
 
     }
 
-    public static DiamondBankAPIJava diamondBankAPI() {
+    static FileConfiguration config() {
 
-        return diamondBankAPI;
+        return config;
 
     }
 
-    public static FileConfiguration config() {
+    private static void initializeScoreboards() {
 
-        return config;
+        // Create sidebar which uses MiniMessage API.
+        final Sidebar<String> sidebar = ProtocolSidebar
+                .newMiniMessageSidebar("<bold><light_green>True<red>OG <yellow>Network", getPlugin());
+
+        // Add a line with example text.
+        sidebar.addLine("<light_green>Just a static line");
+
+        // Add an empty line
+        sidebar.addBlankLine();
+
+        // Add a dynamic line for hunger.
+        sidebar.addUpdatableLine(player -> ("<green>Your Hunger: <yellow>" + (player.getFoodLevel())));
+
+        // Add an empty line
+        sidebar.addBlankLine();
+
+        // Add a dynamic line for health.
+        sidebar.addUpdatableLine(player -> "<gold>Your Health: <red>" + player.getHealth());
+
+        // Add an empty line
+        sidebar.addBlankLine();
+
+        // Add a line with a URL.
+        sidebar.addLine("<aqua>https://github.com/CatCoderr/ProtocolSidebar");
+
+        // Update all lines except static ones every 10 ticks
+        sidebar.updateLinesPeriodically(0, 10);
+
+        // Show the sidebar to all online players.
+        Bukkit.getOnlinePlayers().forEach(sidebar::addViewer);
 
     }
 

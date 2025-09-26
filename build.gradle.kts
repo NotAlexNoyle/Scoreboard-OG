@@ -1,5 +1,4 @@
 /* This is free and unencumbered software released into the public domain */
-
 import org.gradle.kotlin.dsl.provideDelegate
 
 /* ------------------------------ Plugins ------------------------------ */
@@ -70,7 +69,7 @@ dependencies {
     compileOnlyApi(project(":libs:DiamondBank-OG")) {
         attributes { attribute(kotlinAttribute, true) }
     } // Import TrueOG network DiamondBank-OG Kotlin API (from source).
-    compileOnly(files("libs/ProtocolSidebar-1.19.4.jar")) // Import legacy ProtocolSidebar API.
+    implementation(files("libs/ProtocolSidebar/ProtocolSidebar-1.19.4.jar")) // Import legacy ProtocolSidebar API.
 }
 
 apply(from = "eclipse.gradle.kts") // Import eclipse classpath support script.
