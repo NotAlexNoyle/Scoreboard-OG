@@ -7,9 +7,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import net.trueog.diamondbankog.DiamondBankAPIJava;
 
-public class TemplateOG extends JavaPlugin {
+public class ScoreboardOG extends JavaPlugin {
 
-    private static TemplateOG plugin;
+    private static ScoreboardOG plugin;
     private static DiamondBankAPIJava diamondBankAPI;
     private static FileConfiguration config;
 
@@ -39,7 +39,7 @@ public class TemplateOG extends JavaPlugin {
 
     }
 
-    public static TemplateOG getPlugin() {
+    public static ScoreboardOG getPlugin() {
 
         return plugin;
 

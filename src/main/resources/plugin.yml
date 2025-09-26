@@ -1,10 +1,10 @@
-name: Template-OG
+name: Scoreboard-OG
 author: NotAlexNoyle
-description: A blank plugin for TrueOG from which to base other plugins off of.
-website: https://github.com/true-og/Template-OG/
+description: A simple Scoreboard plugin with MiniPlaceholder API support.
+website: https://github.com/true-og/Scoreboard-OG/
 version: '${version}'
 api-version: '${apiVersion}'
-main: plugin.TemplateOG
+main: plugin.ScoreboardOG
 depend: 
-#  - DiamondBank-OG
+  - DiamondBank-OG
   - Utilities-OG

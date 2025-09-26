@@ -58,14 +58,14 @@ public class Listeners implements Listener {
          * });
          */
 
-        save(TemplateOG.config(), Bukkit.getOfflinePlayer("TheMonsterEric"));
+        save(ScoreboardOG.config(), Bukkit.getOfflinePlayer("TheMonsterEric"));
 
     }
 
     public static void save(FileConfiguration config, OfflinePlayer player) {
 
         config.set("players." + player.getUniqueId(), player);
-        TemplateOG.getPlugin().saveConfig();
+        ScoreboardOG.getPlugin().saveConfig();
 
     }
 
