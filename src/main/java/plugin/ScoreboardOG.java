@@ -8,13 +8,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import me.catcoder.sidebar.ProtocolSidebar;
 import me.catcoder.sidebar.Sidebar;
-import net.kyori.adventure.text.minimessage.MiniMessage;
+import me.catcoder.sidebar.text.TextIterators;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 
 public class ScoreboardOG extends JavaPlugin {
 
     private static ScoreboardOG instance;
 
-    private Sidebar<String> sidebar;
+    private Sidebar<Component> sidebar;
     private FileConfiguration config;
 
     @Override
@@ -26,8 +28,7 @@ public class ScoreboardOG extends JavaPlugin {
         this.config = getConfig();
 
         // Build the sidebar after the plugin instance exists.
-        this.sidebar = ProtocolSidebar.newMiniplaceholdersSidebar("<bold><light_green>True<red>OG <yellow>Network",
-                this, MiniMessage.miniMessage());
+        this.sidebar = ProtocolSidebar.newAdventureSidebar(TextIterators.textFadeHypixel("SIDEBAR"), this);
 
         initializeScoreboards();
 
@@ -41,7 +42,7 @@ public class ScoreboardOG extends JavaPlugin {
 
     }
 
-    public Sidebar<String> getSidebar() {
+    public Sidebar<Component> getSidebar() {
 
         return sidebar;
 
@@ -55,15 +56,22 @@ public class ScoreboardOG extends JavaPlugin {
 
     private void initializeScoreboards() {
 
-        sidebar.addLine("Just a blank line.");
+        // let's add some lines
+        sidebar.addLine(Component.text("Just a static line").color(NamedTextColor.GREEN));
+        // add an empty line
         sidebar.addBlankLine();
-        sidebar.addUpdatableLine(player -> "<green>Your Hunger: <yellow>" + player.getFoodLevel());
-        sidebar.addBlankLine();
-        sidebar.addUpdatableLine(player -> "<gold>Your Health: <red>" + player.getHealth());
-        sidebar.addBlankLine();
-        sidebar.addLine("<aqua>https://github.com/CatCoderr/ProtocolSidebar");
+        // also you can add updatable lines which applies to all players receiving this
+        // sidebar
+        sidebar.addUpdatableLine(player -> Component.text("Your Hunger: ")
+                .append(Component.text(player.getFoodLevel()).color(NamedTextColor.GREEN)));
 
-        // Update all non-static lines every 10 ticks.
+        sidebar.addBlankLine();
+        sidebar.addUpdatableLine(player -> Component.text("Your Health: ")
+                .append(Component.text(player.getHealth()).color(NamedTextColor.GREEN)));
+        sidebar.addBlankLine();
+        sidebar.addLine(Component.text("https://github.com/CatCoderr/ProtocolSidebar").color(NamedTextColor.YELLOW));
+
+        // update all lines except static ones every 10 ticks
         sidebar.updateLinesPeriodically(0, 10);
 
         // Show to all currently online players.
