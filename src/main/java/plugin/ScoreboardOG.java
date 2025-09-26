@@ -8,67 +8,65 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import me.catcoder.sidebar.ProtocolSidebar;
 import me.catcoder.sidebar.Sidebar;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 
 public class ScoreboardOG extends JavaPlugin {
 
-    private static ScoreboardOG plugin;
-    private static FileConfiguration config;
+    private static ScoreboardOG instance;
+
+    private Sidebar<String> sidebar;
+    private FileConfiguration config;
 
     @Override
     public void onEnable() {
 
-        plugin = this;
+        instance = this;
 
         saveDefaultConfig();
-        config = getConfig();
+        this.config = getConfig();
+
+        // Build the sidebar after the plugin instance exists.
+        this.sidebar = ProtocolSidebar.newMiniplaceholdersSidebar("<bold><light_green>True<red>OG <yellow>Network",
+                this, MiniMessage.miniMessage());
 
         initializeScoreboards();
 
-    }
-
-    public static ScoreboardOG getPlugin() {
-
-        return plugin;
+        getServer().getPluginManager().registerEvents(new Listeners(), this);
 
     }
 
-    static FileConfiguration config() {
+    public static ScoreboardOG getInstance() {
+
+        return instance;
+
+    }
+
+    public Sidebar<String> getSidebar() {
+
+        return sidebar;
+
+    }
+
+    public FileConfiguration config() {
 
         return config;
 
     }
 
-    private static void initializeScoreboards() {
+    private void initializeScoreboards() {
 
-        // Create sidebar which uses MiniMessage API.
-        final Sidebar<String> sidebar = ProtocolSidebar
-                .newMiniMessageSidebar("<bold><light_green>True<red>OG <yellow>Network", getPlugin());
-
-        // Add a line with example text.
-        sidebar.addLine("<light_green>Just a static line");
-
-        // Add an empty line
+        sidebar.addLine("Just a blank line.");
         sidebar.addBlankLine();
-
-        // Add a dynamic line for hunger.
-        sidebar.addUpdatableLine(player -> ("<green>Your Hunger: <yellow>" + (player.getFoodLevel())));
-
-        // Add an empty line
+        sidebar.addUpdatableLine(player -> "<green>Your Hunger: <yellow>" + player.getFoodLevel());
         sidebar.addBlankLine();
-
-        // Add a dynamic line for health.
         sidebar.addUpdatableLine(player -> "<gold>Your Health: <red>" + player.getHealth());
-
-        // Add an empty line
         sidebar.addBlankLine();
-
-        // Add a line with a URL.
         sidebar.addLine("<aqua>https://github.com/CatCoderr/ProtocolSidebar");
 
-        // Update all lines except static ones every 10 ticks
+        // Update all non-static lines every 10 ticks.
         sidebar.updateLinesPeriodically(0, 10);
 
-        // Show the sidebar to all online players.
+        // Show to all currently online players.
         Bukkit.getOnlinePlayers().forEach(sidebar::addViewer);
 
     }
